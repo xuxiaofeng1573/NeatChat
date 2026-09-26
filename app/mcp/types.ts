@@ -36,7 +36,7 @@ export const McpResponseMessageSchema: z.ZodType<McpResponseMessage> = z.object(
   {
     jsonrpc: z.literal("2.0").optional(),
     id: z.union([z.string(), z.number()]).optional(),
-    result: z.record(z.unknown()).optional(),
+    result: z.record(z.string(), z.unknown()).optional(),
     error: z
       .object({
         code: z.number(),
