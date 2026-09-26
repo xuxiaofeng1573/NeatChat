@@ -16,7 +16,7 @@ export const McpRequestMessageSchema: z.ZodType<McpRequestMessage> = z.object({
   jsonrpc: z.literal("2.0").optional(),
   id: z.union([z.string(), z.number()]).optional(),
   method: z.string(),
-  params: z.record(z.unknown()).optional(),
+  params: z.record(z.string(), z.unknown()).optional(),
 });
 
 export interface McpResponseMessage {
