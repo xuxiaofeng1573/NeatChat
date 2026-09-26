@@ -94,8 +94,8 @@
     "tsx": "^4.16.0",
     "typescript": "5.2.2",
     "watch": "^1.0.2",
-    "@types/lodash": "^4.14.202",
-    "webpack": "^5.88.1"
+    "webpack": "^5.88.1",
+    "@types/lodash": "^4.14.202"
   },
   "resolutions": {
     "lint-staged/yaml": "^2.2.2"
