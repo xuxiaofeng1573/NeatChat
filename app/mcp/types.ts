@@ -6,28 +6,39 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 
 export type McpRequestId = string | number;
 
-type JsonRpcParams = Record<string, unknown>;
-type JsonRpcResult = Record<string, unknown>;
+export type McpJsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: McpJsonValue }
+  | McpJsonValue[];
 
-/** A JSON-RPC request. Notifications are represented by McpNotifications. */
+export type McpParams = Record<string, unknown> | unknown[];
+
 export interface McpRequestMessage {
-  jsonrpc: "2.0";
-  id: McpRequestId;
+  jsonrpc?: "2.0";
+  id?: McpRequestId;
   method: string;
-  params?: JsonRpcParams;
+  params?: McpParams;
 }
 
 export const McpRequestMessageSchema: z.ZodType<McpRequestMessage> = z.object({
-  jsonrpc: z.literal("2.0"),
-  id: z.union([z.string(), z.number()]),
+  jsonrpc: z.literal("2.0").optional(),
+  id: z.union([z.string(), z.number()]).optional(),
   method: z.string().min(1),
-  params: z.record(z.string(), z.unknown()).optional(),
+  params: z
+    .union([
+      z.record(z.string(), z.unknown()),
+      z.array(z.unknown()),
+    ])
+    .optional(),
 });
 
 export interface McpResponseMessage {
-  jsonrpc: "2.0";
-  id: McpRequestId;
-  result?: JsonRpcResult;
+  jsonrpc?: "2.0";
+  id?: McpRequestId;
+  result?: unknown;
   error?: {
     code: number;
     message: string;
@@ -35,12 +46,11 @@ export interface McpResponseMessage {
   };
 }
 
-// A response must contain exactly one of result and error.
 export const McpResponseMessageSchema: z.ZodType<McpResponseMessage> = z
   .object({
-    jsonrpc: z.literal("2.0"),
-    id: z.union([z.string(), z.number()]),
-    result: z.record(z.string(), z.unknown()).optional(),
+    jsonrpc: z.literal("2.0").optional(),
+    id: z.union([z.string(), z.number()]).optional(),
+    result: z.unknown().optional(),
     error: z
       .object({
         code: z.number().int(),
@@ -54,15 +64,20 @@ export const McpResponseMessageSchema: z.ZodType<McpResponseMessage> = z
   });
 
 export interface McpNotifications {
-  jsonrpc: "2.0";
+  jsonrpc?: "2.0";
   method: string;
-  params?: JsonRpcParams;
+  params?: McpParams;
 }
 
 export const McpNotificationsSchema: z.ZodType<McpNotifications> = z.object({
-  jsonrpc: z.literal("2.0"),
+  jsonrpc: z.literal("2.0").optional(),
   method: z.string().min(1),
-  params: z.record(z.string(), z.unknown()).optional(),
+  params: z
+    .union([
+      z.record(z.string(), z.unknown()),
+      z.array(z.unknown()),
+    ])
+    .optional(),
 });
 
 ////////////
@@ -77,7 +92,6 @@ export interface McpTool {
 }
 
 export interface ListToolsResponse {
-  // MCP tools/list returns an array, not a single tool object.
   tools: McpTool[];
   [key: string]: unknown;
 }
