@@ -95,6 +95,7 @@
     "typescript": "5.2.2",
     "watch": "^1.0.2",
     "webpack": "^5.88.1",
+    "@opennextjs/cloudflare": "^0.5.0",
     "@types/lodash": "^4.14.202"
   },
   "resolutions": {
