@@ -344,7 +344,7 @@ export async function executeMcpAction(
       throw new Error(`Client ${clientId} not found`);
     }
     logger.info(`Executing request for [${clientId}]`);
-    return await executeRequest(client.client, request);
+    return await executeRequest(client.client, request as any);
   } catch (error) {
     logger.error(`Failed to execute request for [${clientId}]: ${error}`);
     throw error;
