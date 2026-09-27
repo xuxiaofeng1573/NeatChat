@@ -238,7 +238,7 @@ export function McpMarketPage() {
     try {
       const result = await getClientTools(id);
       if (result) {
-        setTools(result);
+        setTools(result.tools);
       } else {
         throw new Error("Failed to load tools");
       }
@@ -770,9 +770,9 @@ export function McpMarketPage() {
               <div className={styles["tools-list"]}>
                 {isLoading ? (
                   <div>{Locale.Mcp.Market.ToolsModal.Loading}</div>
-                ) : tools?.tools ? (
-                  tools.tools.map(
-                    (tool: ListToolsResponse["tools"], index: number) => (
+                ) : tools ? (
+                  tools.map(
+                    (tool: (typeof tools)[number], index: number) => (
                       <div key={index} className={styles["tool-item"]}>
                         <div className={styles["tool-name"]}>{tool.name}</div>
                         <div className={styles["tool-description"]}>
