@@ -1,7 +1,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { MCPClientLogger } from "./logger";
-import { ListToolsResponse, McpRequestMessage, ServerConfig } from "./types";
+import { ListToolsResponse, ServerConfig } from "./types";
 import { z } from "zod";
 
 const logger = new MCPClientLogger();
@@ -49,7 +49,10 @@ export async function listTools(client: Client): Promise<ListToolsResponse> {
 
 export async function executeRequest(
   client: Client,
-  request: McpRequestMessage,
+  request: {
+    method: string;
+    params?: Record<string, unknown>;
+  },
 ) {
   return client.request(request, z.any());
 }
